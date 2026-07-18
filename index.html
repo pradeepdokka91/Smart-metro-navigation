@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Metro Navigator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <p class="eyebrow">METRO ROUTE PLANNER</p>
+        <h1>Smart Metro Navigator</h1>
+        <p class="subtitle">Find the quickest way across the city.</p>
+      </section>
+
+      <section class="auth-card" aria-label="User account portal">
+        <div id="auth-guest">
+          <div class="auth-heading"><div><p class="eyebrow">YOUR ACCOUNT</p><h2 id="auth-title">Log in to save journeys</h2></div></div>
+          <div class="auth-tabs">
+            <button class="auth-tab selected" data-auth-mode="login">Log in</button>
+            <button class="auth-tab" data-auth-mode="register">Create account</button>
+          </div>
+          <form id="auth-form" class="auth-form">
+            <label id="name-field" hidden>Full name<input id="auth-name" type="text" autocomplete="name" /></label>
+            <label>Email<input id="auth-email" type="email" autocomplete="email" required /></label>
+            <label>Password<input id="auth-password" type="password" autocomplete="current-password" minlength="6" required /></label>
+            <button class="auth-submit" type="submit">Log in</button>
+          </form>
+          <button id="forgot-password" class="forgot-button" type="button">Forgot password?</button>
+          <div id="recovery-panel" class="recovery-panel" hidden>
+            <p class="recovery-title">Reset your password with email OTP</p>
+            <form id="otp-request-form" class="recovery-form"><label>Email<input id="recovery-email" type="email" autocomplete="email" required /></label><button class="quiet-button" type="submit">Send OTP</button></form>
+            <form id="otp-reset-form" class="recovery-form" hidden><label>Six-digit OTP<input id="recovery-otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required /></label><label>New password<input id="recovery-password" type="password" minlength="6" autocomplete="new-password" required /></label><button class="auth-submit" type="submit">Reset password</button></form>
+            <p id="recovery-message" class="auth-message"></p>
+          </div>
+          <p id="auth-message" class="auth-message"></p>
+        </div>
+        <div id="auth-user" hidden>
+          <div class="signed-in"><div><p class="eyebrow">SIGNED IN</p><h2>Welcome, <span id="user-name"></span></h2><p id="user-email"></p></div><button id="logout" class="quiet-button">Log out</button></div>
+          <div id="saved-journeys" class="saved-journeys"></div>
+          <div id="my-tickets" class="my-tickets"></div>
+        </div>
+      </section>
+
+      <section class="planner-card" aria-label="Route planner">
+        <div class="field">
+          <label for="start">Starting station</label>
+          <select id="start"></select>
+        </div>
+
+        <button id="swap" class="swap-button" aria-label="Swap stations" title="Swap stations">⇅</button>
+
+        <div class="field">
+          <label for="destination">Destination station</label>
+          <select id="destination"></select>
+        </div>
+
+        <div class="journey-options" aria-label="Journey priority">
+          <p>Choose what matters most</p>
+          <div class="option-buttons">
+            <button class="option-button selected" data-mode="fastest">⚡ Fastest</button>
+            <button class="option-button" data-mode="cheapest">₹ Cheapest</button>
+            <button class="option-button" data-mode="fewestChanges">⇄ Fewest changes</button>
+          </div>
+        </div>
+
+        <div class="delay-controls">
+          <div class="delay-heading">
+            <div>
+              <p>Live train delay simulator</p>
+              <span>Temporarily add delay to a connection.</span>
+            </div>
+            <strong id="delay-value">0 min</strong>
+          </div>
+          <select id="delay-edge" aria-label="Delayed metro connection"></select>
+          <input id="delay-minutes" type="range" min="0" max="15" value="0" aria-label="Delay in minutes" />
+        </div>
+        <button id="find-route" class="primary-button">Find fastest route</button>
+      </section>
+
+      <section id="result" class="result-card" aria-live="polite">
+        <p class="empty-message">Choose two different stations to plan your journey.</p>
+      </section>
+
+      <section id="booking-panel" class="booking-card" hidden>
+        <p class="eyebrow">METRO TICKET</p>
+        <h2>Book your journey</h2>
+        <p id="booking-summary" class="booking-summary"></p>
+        <form id="booking-form" class="booking-form">
+          <label>Passenger name<input id="passenger-name" type="text" autocomplete="name" required /></label>
+          <label>Travel date<input id="travel-date" type="date" required /></label>
+          <label>Coach preference<select id="coach-preference"><option>Standard coach</option><option>Quiet coach</option><option>Accessible coach</option></select></label>
+          <button class="book-button" type="submit">Confirm booking</button>
+        </form>
+        <p id="booking-message" class="auth-message"></p>
+      </section>
+
+      <section id="ticket-display" class="ticket-display" aria-live="polite"></section>
+
+      <section id="alternatives" class="alternatives-card" aria-live="polite"></section>
+
+      <section class="algorithm-lab" aria-label="Graph algorithm learning lab">
+        <p class="eyebrow">LEARN BY TRYING</p>
+        <h2>DSA algorithm lab</h2>
+        <p class="lab-intro">Use your selected stations to compare four graph algorithms.</p>
+        <div class="algorithm-buttons">
+          <button class="algorithm-button selected" data-algorithm="dijkstra">Dijkstra</button>
+          <button class="algorithm-button" data-algorithm="bfs">BFS</button>
+          <button class="algorithm-button" data-algorithm="dfs">DFS</button>
+          <button class="algorithm-button" data-algorithm="floyd">Floyd–Warshall</button>
+        </div>
+        <div id="algorithm-output" class="algorithm-output" aria-live="polite"></div>
+      </section>
+
+      <section class="map-card" aria-label="Metro network map">
+        <div class="map-heading">
+          <div>
+            <p class="eyebrow">NETWORK VIEW</p>
+            <h2>Metro map</h2>
+          </div>
+          <p>Bright stations show your selected route.</p>
+        </div>
+        <div class="map-wrap">
+          <svg id="metro-map" viewBox="0 0 980 600" role="img" aria-label="Interactive metro network map"></svg>
+        </div>
+      </section>
+
+      <section class="legend">
+        <span><i class="dot blue"></i> Blue Line</span>
+        <span><i class="dot red"></i> Red Line</span>
+        <span><i class="dot green"></i> Green Line</span>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

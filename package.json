@@ -1,0 +1,14 @@
+{
+  "name": "smart-metro-navigation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "mysql2": "^3.23.0",
+    "nodemailer": "^9.0.3"
+  }
+}
